@@ -1,46 +1,35 @@
 const { response, request } = require("express");
 
-// const { validationResult } = require("express-validator");
-
 //importar modelo de usuario
 const Usuario = require("../models/usuario");
 
 //Importar bcryptjs
 const bcryptjs = require("bcryptjs");
 
-const usuariosGet = (req = request, res = response) => {
+const usuariosGet = async (req = request, res = response) => {
   //   const query = req.query;
-  const { nombre = "No name", apikey, limit = 5, page = 1 } = req.query;
+  const { limite = 5, desde = 0 } = req.query;
+
+  // const usuarios = await Usuario.find().skip(desde).limit(limite);
+  // const total = await Usuario.countDocuments();
+
+  const [total, usuarios] = await Promise.all([
+    Usuario.countDocuments(),
+    Usuario.find().skip(Number(desde)).limit(Number(limite)),
+  ]);
 
   res.json({
-    msg: "Bienvenidos al módulo 4",
-    nombre,
-    apikey,
-    limit,
-    page,
+    total,
+    usuarios,
   });
 };
 
 const usuarioPost = async (req = request, res) => {
-  //recibir la respuesta del check
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   return res.status(400).json(errors);
-  // }
-
   const datos = req.body;
 
   const { nombre, correo, password, rol } = datos;
 
   const usuario = new Usuario({ nombre, correo, password, rol });
-
-  //verificar el correo
-  const existeEmail = await Usuario.findOne({ correo });
-  if (existeEmail) {
-    return res.status(400).json({
-      msg: "El correo ya existe",
-    });
-  }
 
   //Encriptar la contraseña
   const salt = bcryptjs.genSaltSync();
@@ -54,12 +43,22 @@ const usuarioPost = async (req = request, res) => {
   });
 };
 
-const usuarioPut = (req = request, res) => {
-  const id = req.params.id;
+const usuarioPut = async (req = request, res) => {
+  const { id } = req.params;
+  const { password, correo, google, ...resto } = req.body;
+
+  //validar password contra la base de datos
+  if (password) {
+    //Encriptar la contraseña
+    const salt = bcryptjs.genSaltSync();
+    resto.password = bcryptjs.hashSync(password, salt);
+  }
+
+  //actualizo los datos
+  const usuario = await Usuario.findByIdAndUpdate(id, resto, { new: true });
 
   res.json({
-    msg: "PUT - Info actualizada",
-    id,
+    usuario,
   });
 };
 

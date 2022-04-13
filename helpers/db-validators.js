@@ -30,6 +30,8 @@ const categoriaExiste = async (id) => {
   }
 };
 
+//Validar producto por id 🤔
+
 module.exports = {
   esRoleValido,
   emailExiste,

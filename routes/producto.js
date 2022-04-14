@@ -4,6 +4,7 @@ const { check } = require("express-validator");
 const { validarJWT } = require("../middlewares/validar-jwt");
 const { validarCampos } = require("../middlewares/validar-campos");
 const { tieneRole } = require("../middlewares/validar-roles");
+const { productoExiste } = require("../helpers/db-validators");
 //productoExiste
 
 const {
@@ -12,7 +13,7 @@ const {
   actualizarProducto,
   borrarProducto,
   obtenerProducto,
-} = require("../controllers/productos");
+} = require("../controllers/producto");
 
 const router = Router();
 
@@ -41,6 +42,7 @@ router.put(
   "/:id",
   [
     validarJWT,
+    tieneRole("ADMIN_ROLE", "VENTAS_ROLE"),
     check("id", "No es un Id válido").isMongoId(),
     check("id").custom(productoExiste), //me aseguro si existe un producto con ese ID 🤔
 

@@ -4,27 +4,13 @@ cloudinary.config(process.env.CLOUDINARY_URL); //configuro cloudinary
 const { response } = require("express");
 // const { subirArchivo } = require("../helpers");
 
-const { Usuario, Producto } = require("../models");
-
-// const extensionesValidas = ["png", "jpg", "jpeg", "gif"];
+// const { Usuario, Producto } = require("../models");
+const Usuario = require("../models/usuario");
+const Producto = require("../models/producto");
 
 //Subir imagen a Cloudinary - Nube----------------------------------
 const actualizarImagenCloudinary = async (req, res = response) => {
   const { id, coleccion } = req.params;
-
-  //Validar imagenes-----------------------------------
-  // let files = req.files;
-  // const { archivo } = files; //obtengo el archivo
-  // const nombreCortado = archivo.name.split("."); //obtener la extensión separando por el punto
-  // const extension = nombreCortado[nombreCortado.length - 1]; //la última posición es la extensión
-  // //validar la extensión
-  // if (!extensionesValidas.includes(extension)) {
-  //   return res.status(400).json({
-  //     msg: `La extensión ${extension} no es permitida , ${extensionesValidas}`,
-  //   });
-  // }
-
-  //----------------------------------------------------
 
   let modelo;
 

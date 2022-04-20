@@ -1,4 +1,5 @@
 const { request, response } = require("express");
+
 const extensionesValidas = ["png", "jpg", "jpeg", "gif"];
 
 const validarExtension = (req = request, res = response, next) => {

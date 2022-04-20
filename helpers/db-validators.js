@@ -45,7 +45,7 @@ const coleccionesPermitidas = (coleccion = "", colecciones = []) => {
 
   if (!incluida) {
     throw new Error(
-      `La colección ${coleccion} no es permitida, ${colecciones}`
+      `La colección ${coleccion} no es permitida, las colecciones permitidas son: ${colecciones}`
     );
   }
 

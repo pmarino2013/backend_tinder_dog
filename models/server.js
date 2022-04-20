@@ -63,8 +63,6 @@ class Server {
     this.app.use(this.productosPath, require("../routes/producto"));
     this.app.use(this.buscarPath, require("../routes/buscar"));
     this.app.use(this.uploadsPath, require("../routes/uploads"));
-
-    //ruta de productos 🤔
   }
 
   listen() {
